@@ -122,6 +122,17 @@ def api_dashboard():
     return json.dumps({'count': count, 'last_reset': date[0].split(" ")[1] if date else '--'})
 
 
+@app.route('/api/reset/status')
+def monitor_reset():
+    db = get_db()
+    cur = db.execute('select count(*) from button_press WHERE is_reset = 0')
+    count = cur.fetchone()[0]
+    if count == 0:
+        return "%"
+    else:
+        return "@"
+
+
 @app.route('/api/reset')
 def dashboard_reset():
     db = get_db()
