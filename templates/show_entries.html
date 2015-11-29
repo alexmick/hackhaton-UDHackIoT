@@ -18,7 +18,7 @@
       <th>Place</th>
     </tr>
     <tbody data-bind="foreach: list">
-      <tr>
+      <tr class="lighten-2" data-bind="css: { teal: seat_number == 23 }">
         <td data-bind="text: pressed_at"></td>
         <td data-bind="text: carriage"></td>
         <td data-bind="text: seat_number"></td>
