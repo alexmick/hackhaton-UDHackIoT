@@ -46,6 +46,16 @@ def close_db(error):
 
 
 @app.route('/')
+def dashboard():
+    db = get_db()
+    cur = db.execute('select count(*) from button_press WHERE is_reset = 0')
+    count = cur.fetchone()
+    cur = db.execute('select pressed_at from button_press WHERE is_reset = 0 order by pressed_at asc LIMIT 1')
+    date = cur.fetchone()
+    return render_template('dashboard.html', count=count, date=date[0].split(" ")[1] if date else date)
+
+
+@app.route('/liste')
 def show_entries():
     db = get_db()
     cur = db.execute('select * from button_press order by pressed_at desc')
@@ -53,21 +63,10 @@ def show_entries():
     return render_template('show_entries.html', entries=json.dumps(entries))
 
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    username = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -111,6 +110,25 @@ def api_list():
     cur = db.execute('select * from button_press order by pressed_at desc')
     entries = [dict((key, row[key]) for key in row.keys()) for row in cur.fetchall()]
     return json.dumps(entries)
+
+
+@app.route('/api/dashboard')
+def api_dashboard():
+    db = get_db()
+    cur = db.execute('select count(*) from button_press WHERE is_reset = 0')
+    count = cur.fetchone()[0]
+    cur = db.execute('select pressed_at from button_press WHERE is_reset = 0 order by pressed_at asc LIMIT 1')
+    date = cur.fetchone()
+    return json.dumps({'count': count, 'last_reset': date[0].split(" ")[1] if date else date})
+
+
+@app.route('/api/reset')
+def dashboard_reset():
+    db = get_db()
+    db.execute('UPDATE button_press SET is_reset = 1 WHERE 1')
+    db.commit()
+    return "success"
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)

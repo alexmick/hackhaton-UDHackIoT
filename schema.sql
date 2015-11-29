@@ -9,5 +9,6 @@ drop table if exists button_press;
 CREATE TABLE button_press (
   carriage integer not null,
   seat_number integer not null,
-  pressed_at text NOT NULL
+  pressed_at text NOT NULL,
+  is_reset integer DEFAULT 0
 );

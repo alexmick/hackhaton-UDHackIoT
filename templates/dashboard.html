@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row valign-wrapper">
+  <div class="col s3 card center-align">
+    <h4>Buttons appuyés:</h4>
+    <p class="big-number" data-bind="text: count"></p>
+  </div>
+  <div class="col s3 card center-align" >
+    <h4>Voiture prioritaire:</h4>
+    <p class="big-number">--</p>
+  </div>
+  <div class="col s3 card center-align" >
+    <h4>Depuis:</h4>
+    <p class="big-number" data-bind="text: last_reset"></p>
+  </div>
+  <div class="col s3 valign" >
+    <button class=" waves-effect waves-light btn-large"><i class="material-icons left">refresh</i> Remise à zéro</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var model = ko.observable({
+      last_reset: '{{ date }}',
+      count: '{{ count[0] }}'
+    });
+
+    ko.applyBindings(model);
+
+    setInterval(function () {
+      $.getJSON("/api/dashboard", function(data) {
+          model(data);
+      })
+    }, 3000);
+  </script>
+{% endblock %}
