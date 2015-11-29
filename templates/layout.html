@@ -1,17 +1,49 @@
-<!doctype html>
-<title>Flaskr</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<div class="page">
-  <h1>Flaskr</h1>
-  <div class="metanav">
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <nav>
+      <div class="container nav-wrapper">
+        <a href="{{ url_for('show_entries') }}" class="brand-logo">Bouton train</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="#">Sass</a></li>
+          <li><a href="#">Components</a></li>
+          <li>
+            {% if not session.logged_in %}
+                <a href="{{ url_for('login') }}">log in</a>
+              {% else %}
+                <a href="{{ url_for('logout') }}">log out</a>
+              {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <div class="container">
+      {% block body %}{% endblock %}
+    </div>
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/knockout-3.4.0.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+
+    <script>
+      {% for message in get_flashed_messages() %}
+        Materialize.toast('{{ message }}', 2000);
+      {% endfor %}
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

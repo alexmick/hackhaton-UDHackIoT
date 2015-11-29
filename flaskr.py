@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-    Flaskr
-    ~~~~~~
-
-    A microblog example application written as Flask tutorial with
-    Flask and sqlite3.
-
-    :copyright: (c) 2015 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
-"""
-
+import json
 import os
+from datetime import datetime
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
@@ -57,9 +48,9 @@ def close_db(error):
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    cur = db.execute('select * from button_press order by pressed_at desc')
+    entries = [dict((key, row[key]) for key in row.keys()) for row in cur.fetchall()]
+    return render_template('show_entries.html', entries=json.dumps(entries))
 
 
 @app.route('/add', methods=['POST'])
@@ -95,6 +86,23 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
+
+@app.route('/api/button/<carriage>-<seat_number>')
+def button(carriage, seat_number):
+    db = get_db()
+    db.execute('insert into button_press (carriage, seat_number, pressed_at) values (?, ?, ?)',
+               [carriage, seat_number, datetime.today().strftime('%Y-%m-%d %H:%M:%S')])
+    db.commit()
+
+    return "You pressed the button {} {}".format(carriage, seat_number)
+
+
+@app.route('/api/list')
+def api_list():
+    db = get_db()
+    cur = db.execute('select * from button_press order by pressed_at desc')
+    entries = [dict((key, row[key]) for key in row.keys()) for row in cur.fetchall()]
+    return json.dumps(entries)
 
 if __name__ == "__main__":
     app.run()

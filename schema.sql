@@ -4,3 +4,10 @@ create table entries (
   title text not null,
   'text' text not null
 );
+
+drop table if exists button_press;
+CREATE TABLE button_press (
+  carriage integer not null,
+  seat_number integer not null,
+  pressed_at text NOT NULL
+);
