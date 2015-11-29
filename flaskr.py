@@ -52,7 +52,7 @@ def dashboard():
     count = cur.fetchone()
     cur = db.execute('select pressed_at from button_press WHERE is_reset = 0 order by pressed_at asc LIMIT 1')
     date = cur.fetchone()
-    return render_template('dashboard.html', count=count, date=date[0].split(" ")[1] if date else date)
+    return render_template('dashboard.html', count=count, date=date[0].split(" ")[1] if date else '--')
 
 
 @app.route('/liste')
@@ -119,7 +119,7 @@ def api_dashboard():
     count = cur.fetchone()[0]
     cur = db.execute('select pressed_at from button_press WHERE is_reset = 0 order by pressed_at asc LIMIT 1')
     date = cur.fetchone()
-    return json.dumps({'count': count, 'last_reset': date[0].split(" ")[1] if date else date})
+    return json.dumps({'count': count, 'last_reset': date[0].split(" ")[1] if date else '--'})
 
 
 @app.route('/api/reset')
@@ -127,7 +127,7 @@ def dashboard_reset():
     db = get_db()
     db.execute('UPDATE button_press SET is_reset = 1 WHERE 1')
     db.commit()
-    return "success"
+    return redirect(url_for('dashboard'))
 
 
 if __name__ == "__main__":
