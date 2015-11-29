@@ -128,9 +128,9 @@ def monitor_reset():
     cur = db.execute('select count(*) from button_press WHERE is_reset = 0')
     count = cur.fetchone()[0]
     if count == 0:
-        return "%"
+        return "%", 8
     else:
-        return "@"
+        return "@", 9
 
 
 @app.route('/api/reset')
