@@ -91,6 +91,7 @@ def logout():
 def status():
     return "Hello !"
 
+
 @app.route('/api/button/<carriage>-<seat_number>')
 def button(carriage, seat_number):
     db = get_db()
