@@ -1,30 +1,31 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="row valign-wrapper">
-  <div class="col s3 card center-align">
-    <h4>Buttons appuyés:</h4>
+<div class="row tight">
+  <div class="col s4 card center-align">
+    <h5>Buttons appuyés:</h5>
     <p class="big-number" data-bind="text: count"></p>
   </div>
-  <div class="col s3 card center-align">
-    <h4>Voiture prioritaire:</h4>
+  <div class="col s4 card center-align">
+    <h5>Voiture prioritaire:</h5>
     <p class="big-number"><span data-bind="if: count > 0">10</span><span data-bind="if: count <= 0">--</span></p>
   </div>
-  <div class="col s3 card center-align">
-    <h4>Depuis:</h4>
+  <div class="col s4 card center-align">
+    <h5>Depuis:</h5>
     <p class="big-number" data-bind="text: last_reset"></p>
   </div>
-  <div class="col s3 valign" >
-    <a class="waves-effect waves-light btn-large" href="{{ url_for('dashboard_reset') }}"><i class="material-icons left">refresh</i> Remise à zéro</a>
-  </div>
 </div>
+<div class="row">
+  <a class="waves-effect waves-light btn-large right" href="{{ url_for('dashboard_reset') }}"><i class="material-icons left">refresh</i>Remise à zéro</a>
+</div>
+
 <div class="row" data-bind="if: count <= 0">
-  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-blank.gif') }}">
+  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-blank.jpg') }}">
 </div>
 <div class="row" data-bind="if: count == 1" >
-  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-one.gif') }}">
+  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-one.jpg') }}">
 </div>
 <div class="row" data-bind="if: count >= 2" >
-  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-two.gif') }}">
+  <img class="responsive-img" src="{{ url_for('static', filename='img/carriage-two.jpg') }}">
 </div>
 {% endblock %}
 

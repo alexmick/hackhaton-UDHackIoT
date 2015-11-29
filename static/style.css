@@ -6,3 +6,11 @@ h4 {
     margin: 10px;
     font-size: 40px;
 }
+
+.card {
+    margin-bottom: 0;
+}
+
+.row.tight {
+    margin-bottom: 0;
+}
