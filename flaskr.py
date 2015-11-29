@@ -69,15 +69,18 @@ def add_entry():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+        username = request.form['username']
+        password = request.form['password']
+
+        if username != app.config['USERNAME']:
+            error = u"Nom d'utilisateur inconnu"
+        elif password != app.config['PASSWORD']:
+            error = u"Mot de passe incorrect"
         else:
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error)
+    return render_template('login.html', error=error, username=username)
 
 
 @app.route('/logout')
